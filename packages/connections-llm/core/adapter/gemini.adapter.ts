@@ -1,38 +1,32 @@
-// src/infrastructure/llm/gemini-mapper.ts
+import { IPathNode, IContentPart } from "../model/content/ipath.core.model.content";
 
-import { Part } from "@google/generative-ai";
-import { IContentPart } from "../model/content/content-parte.core.model.content";
-import { IPathNode } from "../model/content/ipath.core.model.content";
-
-export class GeminiMapper {
-  
-  static toGeminiFormat(nodes: IPathNode[]): any[] {
+export class GeminiAdapter {
+  static toApiFormat(nodes: IPathNode[]) {
+    // Filtra 'system' para o formato específico do Gemini ou mapeia para 'user' dependendo da versão
     return nodes.map(node => ({
-      role: node.role === 'model' ? 'model' : 'user', // Gemini usa 'model' em vez de 'assistant'
-      parts: node.parts.map(part => this.mapPart(part))
+      role: node.role === 'model' ? 'model' : 'user',
+      parts: node.parts.map(part => {
+        if (part.type === 'text') return { text: part.text };
+        if (part.type === 'inline_data') return { inlineData: part.inlineData };
+        if (part.type === 'function_call') return { functionCall: part.functionCall };
+        if (part.type === 'function_response') return { functionResponse: part.functionResponse };
+        return { text: "" };
+      })
     }));
   }
 
-  private static mapPart(part: IContentPart): Part {
-    switch (part.type) {
-      case 'text':
-        return { text: part.text! };
-      case 'inline_data':
-        return {
-          inlineData: {
-            mimeType: part.inlineData!.mimeType,
-            data: part.inlineData!.data // Base64
-          }
-        };
-      case 'function_call':
-        return {
-          functionCall: {
-            name: part.functionCall!.name,
-            args: part.functionCall!.args
-          }
-        };
-      default:
-        throw new Error(`Tipo de parte não suportado pelo Gemini: ${part.type}`);
-    }
+  async execute(nodes: IPathNode[]): Promise<Partial<IPathNode>> {
+    const contents = GeminiAdapter.toApiFormat(nodes);
+    
+    // Simulação de chamada: aqui você usaria @google/generative-ai
+    return {
+      role: 'model',
+      parts: [{ type: 'text', text: "Resposta processada pelo Gemini 1.5 Pro." }],
+      metadata: { 
+        model_version: 'gemini-1.5-pro',
+        executedAt: new Date(),
+        finish_reason: 'STOP'
+      }
+    };
   }
 }

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { LogprobsSchema, PerformanceSchema, SettingsSchema, UsageSchema } from './ipath.core.model.content';
+import { UsageSchema, PerformanceSchema, LogprobsSchema, SettingsSchema } from './ipath.core.model.content';
 
 // --- Texto Puro ---
 export const TextPartSchema = z.object({

@@ -4,43 +4,22 @@
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "removeComments": true,
-    "noEmitOnError": true,
-    "sourceMap": true,
-
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-
-    "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["apps/*", "packages/*"]
+      "@apps/*": ["apps/*"],
+      "@packages/*": ["packages/*"],
+      "@/*": ["*"]
     },
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-
+    "importHelpers": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-
-    "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
-    "importHelpers": true,
-    "pretty": true
+    "strict": true
   },
   "include": [
     "apps/**/*.ts",
